@@ -53,6 +53,19 @@
     #loading-section { display: block; }
     #success-section { display: none; }
     #error-section { display: none; }
+    .btn-notion {
+      display: inline-block;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
+      color: #ffffff !important;
+      font-weight: bold;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      -webkit-text-fill-color: #ffffff;
+    }
+    .btn-notion:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
@@ -74,6 +87,7 @@
       <p>まもなくお礼のメールをお送りします。</p>
       <hr class="divider">
       <p class="note">IBD Pick は PubMed 掲載の IBD 関連論文を毎週収集・要約した情報サービスです。</p>
+      <a href="https://www.notion.so/IBD-Pick-31340ea63a3e8063810ac2769b470fec" class="btn-notion" target="_blank">過去のダイジェストを見る →</a>
     </div>
 
     <!-- エラー -->
@@ -121,7 +135,7 @@
         if (data.status === 'ok') {
           showSuccess();
         } else if (data.status === 'expired') {
-          showError('リンクの有効期限が切れています', '確認メールの有効期限は72時間です。再度登録フォームからお申し込みください。');
+          showError('リンクの有効期限が切れています', '確認メールの有効期限は24時間です。再度登録フォームからお申し込みください。');
         } else if (data.status === 'already') {
           showSuccess(); // 既に確認済みでも成功扱い
         } else {
