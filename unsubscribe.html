@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBD Pick - 配信停止</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 48px 40px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    .icon { font-size: 56px; margin-bottom: 24px; }
+    h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; }
+    p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 8px; }
+    .badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .badge.error { background: #fdecea; color: #c62828; }
+    .badge.loading { background: #e3f2fd; color: #1565c0; }
+    .divider { border: none; border-top: 1px solid #eee; margin: 24px 0; }
+    .note { font-size: 13px; color: #999; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid #e0e0e0;
+      border-top-color: #1565c0;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-section { display: block; }
+    #success-section { display: none; }
+    #error-section { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- ローディング -->
+    <div id="loading-section">
+      <div class="spinner"></div>
+      <h1>処理中...</h1>
+      <p>しばらくお待ちください。</p>
+    </div>
+
+    <!-- 成功 -->
+    <div id="success-section">
+      <div class="icon">✅</div>
+      <div class="badge">配信停止完了</div>
+      <h1>配信停止が完了しました</h1>
+      <p>IBD Pick のメール配信を停止しました。</p>
+      <p>これまでご愛読いただきありがとうございました。</p>
+      <hr class="divider">
+      <p class="note">確認メールをお送りしました。<br>再登録をご希望の場合はいつでも登録フォームからお申し込みいただけます。</p>
+    </div>
+
+    <!-- エラー -->
+    <div id="error-section">
+      <div class="icon">⚠️</div>
+      <div class="badge error">エラー</div>
+      <h1 id="error-title">処理に失敗しました</h1>
+      <p id="error-msg">リンクが無効か、既に処理済みの可能性があります。</p>
+      <hr class="divider">
+      <p class="note">お手数ですが、<a href="mailto:digest@ibdpick.com" style="color:#0066cc;">digest@ibdpick.com</a> までご連絡ください。</p>
+    </div>
+
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz_Vi6zMJ6KtgZWkN2p8Sh7YBXQww-MqHCPuLfaXZrzlAw-T4r2VZzsHcJ3cTMUZU_J/exec';
+
+    function showSuccess() {
+      document.getElementById('loading-section').style.display = 'none';
+      document.getElementById('success-section').style.display = 'block';
+    }
+
+    function showError(title, msg) {
+      document.getElementById('loading-section').style.display = 'none';
+      document.getElementById('error-section').style.display = 'block';
+      if (title) document.getElementById('error-title').textContent = title;
+      if (msg) document.getElementById('error-msg').textContent = msg;
+    }
+
+    if (!token) {
+      showError('URLが正しくありません', '配信停止リンクが不完全です。メール内のリンクをそのままクリックしてください。');
+    } else {
+      fetch(GAS_URL + '?action=unsubscribe&token=' + encodeURIComponent(token))
+        .then(res => res.text())
+        .then(html => {
+          // GASはHTMLを直接返すため、成功キーワードで判定
+          if (html.includes('配信停止が完了しました') || html.includes('配信停止完了')) {
+            showSuccess();
+          } else if (html.includes('有効期限')) {
+            showError('リンクの有効期限が切れています', '配信停止リンクの有効期限は24時間です。メール内のリンクを再度クリックするか、digest@ibdpick.com までご連絡ください。');
+          } else {
+            showError('処理に失敗しました', 'お手数ですが、digest@ibdpick.com までご連絡ください。');
+          }
+        })
+        .catch(() => {
+          showError('通信エラー', 'ネットワークエラーが発生しました。時間をおいて再度お試しください。');
+        });
+    }
+  </script>
+</body>
+</html>
