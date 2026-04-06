@@ -94,6 +94,47 @@
       background: #e8f0fa;
     }
 
+    /* 再生速度ボタン */
+    .speed-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .speed-label {
+      font-size: 11px;
+      color: #6b7a8d;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .speed-btn {
+      flex: 1;
+      padding: 7px 0;
+      border: 1.5px solid #c5d3e8;
+      border-radius: 8px;
+      background: #fff;
+      color: #3a5a8a;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .speed-btn:hover {
+      background: #e8f0fa;
+      border-color: #0077cc;
+    }
+
+    .speed-btn.active {
+      background: #0077cc;
+      border-color: #0077cc;
+      color: #fff;
+    }
+
     .error-msg {
       display: none;
       background: #fff3f3;
@@ -112,15 +153,6 @@
       line-height: 1.7;
       border-top: 1px solid #eef1f5;
       padding-top: 16px;
-    }
-
-    .note a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-
-    .note a:hover {
-      text-decoration: underline;
     }
 
     .loading {
@@ -153,11 +185,17 @@
         <audio id="audio-player" controls preload="metadata">
           お使いのブラウザは音声再生に対応していません。
         </audio>
+        <div class="speed-controls">
+          <span class="speed-label">速度</span>
+          <button class="speed-btn" data-speed="0.75">0.75x</button>
+          <button class="speed-btn active" data-speed="1">1x</button>
+          <button class="speed-btn" data-speed="1.5">1.5x</button>
+          <button class="speed-btn" data-speed="2">2x</button>
+        </div>
       </div>
 
       <div class="note">
-        このナレーションはAIが自動生成したものです。内容の正確性については原著論文をご確認ください。<br>
-        <a href="https://ibdpick.com" target="_blank">IBD Pick トップページ</a>
+        このナレーションはAIが自動生成したものです。内容の正確性については原著論文をご確認ください。
       </div>
     </div>
   </div>
@@ -194,6 +232,17 @@
         audioEl.style.display = 'none';
         titleEl.textContent = 'IBD Pick 音声ダイジェスト';
       }
+
+      // 再生速度ボタン
+      const speedBtns = document.querySelectorAll('.speed-btn');
+      speedBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const speed = parseFloat(btn.getAttribute('data-speed'));
+          audioEl.playbackRate = speed;
+          speedBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+        });
+      });
     })();
   </script>
 </body>
