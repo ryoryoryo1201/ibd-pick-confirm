@@ -3,675 +3,634 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBD Pick — 週10分でIBDの最前線を</title>
-  <meta name="description" content="PubMedの最新IBD論文をAIが日本語で要約。毎週月曜AM7時、あなたにメールが届きます。完全無料・登録30秒。">
+  <title>IBD Pick — IBD領域の重要論文を、週1回、5分で。</title>
+  <meta name="description" content="PubMed掲載論文から、医療・製薬関係者が押さえておきたいIBDトピックを日本語で整理してお届けします。原著リンク付き・週1回配信・無料β版公開中。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --cream: #f9f7f2;
-      --dark: #0d1117;
-      --dark2: #111827;
-      --gold: #b8882a;
-      --gold-light: #d4a843;
-      --text: #1a1a1a;
-      --text-muted: #666;
-      --border: #e5e0d8;
-      --section-num: rgba(180,160,120,0.15);
+      --white: #ffffff;
+      --bg: #f8fafc;
+      --bg2: #f1f5f9;
+      --navy: #1e3a5f;
+      --navy-light: #2d5282;
+      --blue: #3b7dd8;
+      --blue-light: #ebf4ff;
+      --teal: #0d7377;
+      --teal-light: #e6f7f7;
+      --text: #1a202c;
+      --text-2: #4a5568;
+      --text-3: #718096;
+      --border: #e2e8f0;
+      --border2: #cbd5e0;
+      --tag-uc: #ebf4ff;
+      --tag-uc-text: #2b6cb0;
+      --tag-cd: #f0fff4;
+      --tag-cd-text: #276749;
+      --tag-bio: #faf5ff;
+      --tag-bio-text: #6b46c1;
+      --tag-jak: #fff5f5;
+      --tag-jak-text: #c53030;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
-      background: var(--cream);
+      font-family: 'Noto Sans JP', 'Inter', -apple-system, sans-serif;
+      background: var(--white);
       color: var(--text);
       line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* ===== UTILITY ===== */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 100px; letter-spacing: 0.03em;
+    }
+    .tag-uc { background: var(--tag-uc); color: var(--tag-uc-text); }
+    .tag-cd { background: var(--tag-cd); color: var(--tag-cd-text); }
+    .tag-bio { background: var(--tag-bio); color: var(--tag-bio-text); }
+    .tag-jak { background: var(--tag-jak); color: var(--tag-jak-text); }
+    .tag-rwd { background: #fffbeb; color: #b45309; }
+    .tag-diet { background: #f0fff4; color: #276749; }
 
     /* ===== NAV ===== */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 48px;
-      background: var(--cream);
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
     }
-    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 12px rgba(0,0,0,0.06); }
-    .nav-logo { display: flex; align-items: baseline; gap: 10px; }
-    .nav-logo-main { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; color: var(--text); }
-    .nav-logo-sub { font-size: 11px; letter-spacing: 0.18em; color: var(--gold); font-weight: 500; text-transform: uppercase; }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 0 32px;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px; text-decoration: none;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px; background: var(--blue); border-radius: 50%;
+    }
+    .nav-logo-text { font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: 0.01em; }
+    .nav-logo-badge {
+      font-size: 10px; font-weight: 600; color: var(--blue);
+      background: var(--blue-light); padding: 2px 8px; border-radius: 100px;
+      letter-spacing: 0.05em;
+    }
     .nav-cta {
-      background: var(--dark); color: #fff;
-      padding: 10px 24px; font-size: 13px; font-weight: 600;
-      letter-spacing: 0.04em; text-decoration: none;
-      transition: background 0.2s;
+      background: var(--navy); color: #fff;
+      padding: 9px 22px; font-size: 13px; font-weight: 600;
+      border-radius: 6px; text-decoration: none; letter-spacing: 0.02em;
+      transition: background 0.15s;
     }
-    .nav-cta:hover { background: #222; }
+    .nav-cta:hover { background: var(--navy-light); }
 
     /* ===== HERO ===== */
     #hero {
-      min-height: 100vh;
-      display: grid; grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 120px 48px 80px;
-      gap: 60px;
+      padding: 120px 0 80px;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      border-bottom: 1px solid var(--border);
     }
-    .hero-label {
-      display: flex; align-items: center; gap: 12px;
-      font-size: 11px; letter-spacing: 0.2em; color: var(--gold); font-weight: 600;
-      text-transform: uppercase; margin-bottom: 32px;
+    .hero-inner {
+      max-width: 1080px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: 1fr 420px; gap: 64px; align-items: center;
     }
-    .hero-label::before {
-      content: ''; display: block; width: 40px; height: 1px; background: var(--gold);
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; color: var(--blue);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 20px;
     }
-    .hero-h1 { font-size: clamp(52px, 6vw, 80px); font-weight: 800; line-height: 1.1; margin-bottom: 28px; letter-spacing: -0.02em; }
-    .hero-h1 .gold { color: var(--gold); }
-    .hero-sub { font-size: 15px; color: var(--text-muted); line-height: 1.9; margin-bottom: 40px; }
-    .hero-btns { display: flex; gap: 14px; align-items: center; margin-bottom: 48px; }
+    .hero-eyebrow-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; }
+    h1 {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700; line-height: 1.25;
+      color: var(--navy); letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    h1 .accent { color: var(--blue); }
+    .hero-lead {
+      font-size: 16px; color: var(--text-2); line-height: 1.85;
+      margin-bottom: 32px; max-width: 520px;
+    }
+    .hero-cta-wrap { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
     .btn-primary {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--dark); color: #fff;
-      padding: 14px 32px; font-size: 14px; font-weight: 600;
-      text-decoration: none; letter-spacing: 0.04em;
-      transition: background 0.2s;
+      background: var(--navy); color: #fff;
+      padding: 14px 28px; font-size: 15px; font-weight: 600;
+      border-radius: 8px; text-decoration: none; letter-spacing: 0.01em;
+      transition: background 0.15s, transform 0.1s;
     }
-    .btn-primary:hover { background: #222; }
-    .btn-primary .arrow { font-size: 16px; }
-    .btn-outline {
-      display: inline-block;
-      border: 1.5px solid var(--text); color: var(--text);
-      padding: 13px 28px; font-size: 14px; font-weight: 500;
-      text-decoration: none; letter-spacing: 0.04em;
-      transition: background 0.2s, color 0.2s;
+    .btn-primary:hover { background: var(--navy-light); transform: translateY(-1px); }
+    .hero-meta {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      font-size: 12px; color: var(--text-3);
     }
-    .btn-outline:hover { background: var(--text); color: #fff; }
-    .hero-badges {
-      display: flex; gap: 24px; font-size: 12px; color: var(--text-muted);
-      align-items: center;
-    }
-    .hero-badge { display: flex; align-items: center; gap: 5px; }
-    .hero-badge svg { width: 14px; height: 14px; opacity: 0.5; }
-    .hero-count {
-      margin-top: 24px; display: flex; align-items: center; gap: 10px;
-      font-size: 13px; color: var(--text-muted);
-    }
-    .hero-avatars { display: flex; }
-    .hero-avatar {
-      width: 28px; height: 28px; border-radius: 50%;
-      border: 2px solid var(--cream);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700; color: #fff;
-      margin-left: -6px;
-    }
-    .hero-avatar:first-child { margin-left: 0; }
-    .av1 { background: #2d4a7a; }
-    .av2 { background: #7a3d2d; }
-    .av3 { background: #2d7a4a; }
-    .hero-image-wrap {
-      position: relative; height: 600px;
-      display: flex; align-items: center; justify-content: center;
+    .hero-meta-item { display: flex; align-items: center; gap: 5px; }
+    .hero-meta-item::before { content: '✓'; color: var(--teal); font-weight: 700; }
+
+    /* Hero right: mini email preview */
+    .hero-email-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(30,58,95,0.08), 0 1px 4px rgba(30,58,95,0.04);
       overflow: hidden;
-    }
-    .hero-image-bg {
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, #1a2340 0%, #2d3a5c 40%, #3a4a6e 70%, #1e2d45 100%);
-      border-radius: 2px;
-      position: relative; overflow: hidden;
-    }
-    /* Decorative intestine-like SVG illustration */
-    .hero-image-bg::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80px 120px at 60% 30%, rgba(180,160,100,0.15) 0%, transparent 70%),
-        radial-gradient(ellipse 100px 80px at 35% 65%, rgba(180,160,100,0.1) 0%, transparent 70%),
-        radial-gradient(ellipse 60px 90px at 70% 70%, rgba(100,130,180,0.2) 0%, transparent 70%);
-    }
-    .scroll-hint {
-      position: absolute; bottom: 40px; left: 48px;
-      font-size: 10px; letter-spacing: 0.2em; color: var(--text-muted);
-      display: flex; align-items: center; gap: 16px;
-    }
-    .scroll-line { width: 1px; height: 40px; background: var(--border); }
-
-    /* ===== SECTION BASE ===== */
-    section { position: relative; }
-    .section-inner { max-width: 1200px; margin: 0 auto; padding: 100px 48px; }
-    .section-num {
-      font-size: 120px; font-weight: 800; color: var(--section-num);
-      position: absolute; top: 60px; left: 48px; line-height: 1;
-      user-select: none; pointer-events: none;
-    }
-    .section-label {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
-      font-weight: 600; text-transform: uppercase; margin-bottom: 20px;
-    }
-    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
-    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 700; line-height: 1.2; margin-bottom: 20px; letter-spacing: -0.01em; }
-    .section-lead { font-size: 15px; color: var(--text-muted); max-width: 600px; line-height: 1.9; }
-
-    /* ===== 01 ABOUT ===== */
-    #about .section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    #about .about-text { padding-top: 40px; }
-    #about .about-body { font-size: 15px; color: var(--text-muted); line-height: 1.95; margin-top: 24px; }
-    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
-    .feature-card {
-      padding: 24px;
-      border: 1px solid var(--border);
-      background: #fff;
-    }
-    .feature-icon { font-size: 22px; margin-bottom: 10px; }
-    .feature-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-    .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-    .about-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; border: 1px solid var(--border); }
-    .stat-item { padding: 32px 24px; text-align: center; border-right: 1px solid var(--border); }
-    .stat-item:last-child { border-right: none; }
-    .stat-num { font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 6px; }
-    .stat-label { font-size: 12px; color: var(--text-muted); }
-
-    /* ===== 02 TARGET ===== */
-    #target { background: #fff; }
-    #target .section-inner { text-align: center; }
-    .target-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 56px; border: 1px solid var(--border); }
-    .target-card { padding: 44px 36px; text-align: left; border-right: 1px solid var(--border); position: relative; }
-    .target-card:last-child { border-right: none; }
-    .target-num { font-size: 11px; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    .target-num::before { content: ''; width: 20px; height: 1px; background: var(--gold); display: block; }
-    .target-h3 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
-    .target-body { font-size: 14px; color: var(--text-muted); line-height: 1.85; }
-
-    /* ===== 03 CATEGORIES ===== */
-    #categories { background: var(--dark); color: #fff; }
-    #categories .section-num { color: rgba(255,255,255,0.04); }
-    #categories .section-label { color: var(--gold-light); }
-    #categories .section-label::before { background: var(--gold-light); }
-    #categories .section-title { color: #fff; }
-    .cat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.08); margin-top: 56px; }
-    .cat-item { background: var(--dark); padding: 32px 28px; }
-    .cat-item:hover { background: var(--dark2); }
-    .cat-tag { font-size: 22px; margin-bottom: 12px; }
-    .cat-name { font-size: 15px; font-weight: 600; color: #fff; }
-    .metrics-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.08); margin-top: 1px; }
-    .metric-item { background: var(--dark); padding: 32px 28px; }
-    .metric-num { font-size: 36px; font-weight: 800; color: var(--gold-light); line-height: 1; margin-bottom: 6px; }
-    .metric-label { font-size: 12px; color: rgba(255,255,255,0.5); }
-    .metric-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; }
-
-    /* ===== 04 SAMPLE ===== */
-    #sample .section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .sample-left { padding-top: 40px; }
-    .sample-note-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; color: var(--gold); font-weight: 500;
-      text-decoration: none; margin-top: 24px;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s;
-    }
-    .sample-note-link:hover { border-color: var(--gold); }
-    .email-mock {
-      border: 1px solid var(--border);
-      background: #fff;
       font-size: 13px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.06);
     }
-    .email-header {
-      background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
-      color: #fff; padding: 20px 24px; text-align: center;
+    .hec-header {
+      background: var(--navy); color: #fff;
+      padding: 14px 20px; display: flex; align-items: center; gap: 10px;
     }
-    .email-header h3 { font-size: 18px; font-weight: 700; letter-spacing: 0.05em; }
-    .email-header p { font-size: 11px; opacity: 0.8; margin-top: 4px; }
-    .email-body { padding: 20px 24px; }
-    .email-greeting { font-size: 13px; color: #444; margin-bottom: 14px; }
-    .email-section-title {
-      background: linear-gradient(90deg, #003366 0%, #0066cc 100%);
-      color: #fff; padding: 6px 14px; font-size: 12px; font-weight: 600;
-      display: inline-block; margin-bottom: 12px;
-    }
-    .email-paper { border: 1px solid #e8f0f8; background: #f0f7ff; padding: 14px; margin-bottom: 10px; }
-    .email-paper-title { font-size: 12px; font-weight: 700; color: #003399; line-height: 1.4; margin-bottom: 4px; }
-    .email-badge { display: inline-block; background: #e8f4e8; color: #2e7d32; font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-left: 4px; }
-    .email-meta { font-size: 11px; color: #888; margin-bottom: 6px; }
-    .email-summary { font-size: 11px; color: #444; line-height: 1.6; }
-    .email-footer { background: #f2f4f7; padding: 12px 24px; text-align: center; font-size: 10px; color: #aaa; }
-    .email-features { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
-    .email-feature { display: flex; gap: 12px; align-items: flex-start; }
-    .ef-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
-    .ef-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-    .ef-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-
-    /* ===== 05 ABOUT AUTHOR ===== */
-    #author { background: var(--dark); color: #fff; }
-    #author .section-num { color: rgba(255,255,255,0.04); }
-    #author .section-label { color: var(--gold-light); }
-    #author .section-label::before { background: var(--gold-light); }
-    #author .section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .author-quote {
-      font-size: clamp(20px, 2.5vw, 28px); font-weight: 300;
-      line-height: 1.7; color: rgba(255,255,255,0.85);
-      border-left: 3px solid var(--gold-light);
-      padding-left: 28px; font-style: italic;
-      margin-bottom: 32px;
-    }
-    .author-body { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.9; margin-bottom: 28px; }
-    .author-note-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; color: var(--gold-light); font-weight: 500;
-      text-decoration: none; border-bottom: 1px solid transparent;
+    .hec-logo { font-size: 14px; font-weight: 700; letter-spacing: 0.05em; }
+    .hec-issue { font-size: 11px; opacity: 0.65; margin-left: auto; }
+    .hec-body { padding: 16px 20px; }
+    .hec-week { font-size: 11px; color: var(--text-3); margin-bottom: 12px; }
+    .hec-pick {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px; margin-bottom: 10px; background: #fff;
       transition: border-color 0.2s;
     }
-    .author-note-link:hover { border-color: var(--gold-light); }
-    .author-visual {
-      height: 400px;
-      background: linear-gradient(135deg, #1a2340 0%, #2d3a5c 100%);
-      display: flex; align-items: center; justify-content: center;
-      border: 1px solid rgba(255,255,255,0.08);
+    .hec-pick:hover { border-color: var(--blue); }
+    .hec-pick-label {
+      font-size: 10px; font-weight: 700; color: var(--blue);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
     }
-    .author-visual-text { text-align: center; }
-    .author-initial {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: var(--gold); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-weight: 800; margin: 0 auto 16px;
+    .hec-pick-num {
+      background: var(--blue-light); color: var(--blue);
+      width: 18px; height: 18px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
     }
-    .author-name { font-size: 15px; color: rgba(255,255,255,0.7); }
-    .author-role { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+    .hec-pick-title {
+      font-size: 12px; font-weight: 600; color: var(--navy);
+      line-height: 1.4; margin-bottom: 6px;
+    }
+    .hec-pick-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+    .hec-pick-summary { font-size: 11px; color: var(--text-2); line-height: 1.6; }
+    .hec-pick-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--blue); text-decoration: none; margin-top: 6px; font-weight: 500;
+    }
+    .hec-footer { padding: 10px 20px; border-top: 1px solid var(--border); background: var(--bg); }
+    .hec-footer-text { font-size: 10px; color: var(--text-3); text-align: center; }
 
-    /* ===== 06 FAQ ===== */
-    #faq { background: #fff; }
-    #faq .section-inner { max-width: 800px; }
-    .faq-list { margin-top: 48px; }
-    .faq-item { border-bottom: 1px solid var(--border); }
-    .faq-q {
-      padding: 22px 0; cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 15px; font-weight: 600;
-      user-select: none;
+    /* ===== SECTION HEADERS ===== */
+    .section-header { margin-bottom: 48px; }
+    .section-eyebrow {
+      font-size: 11px; font-weight: 700; color: var(--blue);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px;
     }
-    .faq-q:hover { color: var(--gold); }
-    .faq-icon { font-size: 20px; color: var(--gold); flex-shrink: 0; transition: transform 0.2s; }
-    .faq-item.open .faq-icon { transform: rotate(45deg); }
-    .faq-a { font-size: 14px; color: var(--text-muted); line-height: 1.85; padding-bottom: 20px; display: none; }
-    .faq-item.open .faq-a { display: block; }
+    .section-title {
+      font-size: clamp(24px, 3vw, 36px); font-weight: 700;
+      color: var(--navy); letter-spacing: -0.01em; line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .section-lead { font-size: 15px; color: var(--text-2); max-width: 560px; line-height: 1.85; }
+
+    /* ===== PROBLEM ===== */
+    #problem { padding: 80px 0; background: var(--white); }
+    .problem-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    }
+    .problem-items { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+    .problem-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 20px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px; color: var(--text-2); line-height: 1.6;
+    }
+    .problem-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .problem-visual {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+    }
+    .pubmed-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px; margin-bottom: 12px;
+    }
+    .pubmed-badge {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .pubmed-title { font-size: 12px; font-weight: 600; color: var(--navy); line-height: 1.4; margin-bottom: 4px; }
+    .pubmed-meta { font-size: 11px; color: var(--text-3); }
+    .pubmed-count { font-size: 11px; color: var(--text-3); text-align: center; padding: 8px 0; }
+    .problem-arrow {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: var(--blue);
+      margin: 16px 0; padding: 12px 16px;
+      background: var(--blue-light); border-radius: 8px;
+    }
+
+    /* ===== WHAT YOU GET ===== */
+    #features { padding: 80px 0; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .feature-card {
+      background: #fff; padding: 32px 28px;
+      transition: background 0.15s;
+    }
+    .feature-card:hover { background: var(--blue-light); }
+    .feature-icon-wrap {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--blue-light); display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+    .feature-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .feature-desc { font-size: 13px; color: var(--text-2); line-height: 1.75; }
+
+    /* ===== SAMPLE ===== */
+    #sample { padding: 80px 0; background: var(--white); }
+    .sample-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .sample-left { padding-top: 8px; }
+    .sample-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(30,58,95,0.07);
+    }
+    .sc-header {
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .sc-issue { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 0.08em; text-transform: uppercase; }
+    .sc-date { font-size: 11px; color: var(--text-3); }
+    .sc-body { padding: 20px; }
+    .sc-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .sc-title { font-size: 15px; font-weight: 700; color: var(--navy); line-height: 1.4; margin-bottom: 4px; }
+    .sc-title-ja { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 14px; }
+    .sc-summary-label { font-size: 11px; font-weight: 700; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .sc-points { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .sc-point { display: flex; gap: 8px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .sc-point-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-light); color: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+    .sc-why {
+      background: var(--teal-light); border: 1px solid #b2dfdb;
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;
+    }
+    .sc-why-label { font-size: 10px; font-weight: 700; color: var(--teal); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+    .sc-why-text { font-size: 12px; color: #1a4a4a; line-height: 1.6; }
+    .sc-footer { padding: 12px 20px; border-top: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: space-between; }
+    .sc-pubmed { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; }
+    .sc-pubmed:hover { text-decoration: underline; }
+    .sc-journal { font-size: 11px; color: var(--text-3); }
+
+    /* ===== EDITOR ===== */
+    #editor { padding: 72px 0; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .editor-inner { display: grid; grid-template-columns: 64px 1fr; gap: 28px; align-items: start; max-width: 720px; }
+    .editor-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--navy); display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .editor-quote {
+      font-size: 16px; color: var(--text); line-height: 1.85;
+      font-style: italic; margin-bottom: 16px;
+    }
+    .editor-meta { font-size: 13px; color: var(--text-3); }
+    .editor-meta strong { color: var(--text-2); font-style: normal; }
+
+    /* ===== TRUST ===== */
+    #trust { padding: 56px 0; background: #fff; }
+    .trust-box {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 28px 32px;
+      display: flex; gap: 20px; align-items: flex-start;
+      max-width: 720px;
+    }
+    .trust-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .trust-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .trust-body { font-size: 13px; color: var(--text-2); line-height: 1.8; }
 
     /* ===== CTA ===== */
-    #cta {
-      background: var(--dark); color: #fff;
-      text-align: center;
+    #cta { padding: 96px 0; background: var(--navy); }
+    .cta-inner { text-align: center; }
+    .cta-eyebrow { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+    .cta-title { font-size: clamp(26px, 3.5vw, 40px); font-weight: 700; color: #fff; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 14px; }
+    .cta-sub { font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 40px; line-height: 1.8; }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; color: var(--navy);
+      padding: 16px 36px; font-size: 15px; font-weight: 700;
+      border-radius: 8px; text-decoration: none; letter-spacing: 0.01em;
+      transition: background 0.15s, transform 0.1s;
     }
-    #cta .section-inner { padding: 120px 48px; }
-    .cta-label { font-size: 11px; letter-spacing: 0.2em; color: var(--gold-light); font-weight: 600; text-transform: uppercase; margin-bottom: 20px; }
-    .cta-title { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.01em; }
-    .cta-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 48px; line-height: 1.8; }
-    .btn-cta-main {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--gold); color: #fff;
-      padding: 18px 48px; font-size: 16px; font-weight: 700;
-      text-decoration: none; letter-spacing: 0.04em;
-      transition: background 0.2s;
-    }
-    .btn-cta-main:hover { background: var(--gold-light); }
-    .cta-notes { display: flex; gap: 24px; justify-content: center; margin-top: 28px; }
-    .cta-note { font-size: 12px; color: rgba(255,255,255,0.35); display: flex; align-items: center; gap: 4px; }
+    .btn-cta:hover { background: var(--bg); transform: translateY(-2px); }
+    .cta-notes { display: flex; gap: 28px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+    .cta-note { font-size: 12px; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 5px; }
+    .cta-note::before { content: '✓'; color: rgba(255,255,255,0.5); }
 
     /* ===== FOOTER ===== */
-    footer {
-      background: #080c12; color: rgba(255,255,255,0.3);
-      padding: 32px 48px; font-size: 12px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    footer p { line-height: 1.8; }
+    footer { background: #0f2240; padding: 28px 32px; }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-logo { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.7); }
+    .footer-text { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.6; }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      nav { padding: 16px 24px; }
-      #hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 40px; min-height: auto; }
-      .hero-image-wrap { height: 280px; }
-      .section-inner { padding: 72px 24px; }
-      .section-num { font-size: 80px; left: 24px; }
-      #about .section-inner,
-      #sample .section-inner,
-      #author .section-inner { grid-template-columns: 1fr; gap: 40px; }
-      .target-grid { grid-template-columns: 1fr; }
-      .target-card { border-right: none; border-bottom: 1px solid var(--border); }
-      .cat-grid { grid-template-columns: 1fr 1fr; }
-      .metrics-row { grid-template-columns: 1fr; }
-      footer { flex-direction: column; gap: 8px; text-align: center; padding: 24px; }
-      #about .about-text { padding-top: 0; }
-      .about-stats { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-email-card { max-width: 480px; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .sample-inner { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 20px; }
+      .hero-inner { padding: 0 20px; }
+      #hero { padding: 90px 0 60px; }
     }
     @media (max-width: 600px) {
-      .cat-grid { grid-template-columns: 1fr; }
-      .feature-grid { grid-template-columns: 1fr; }
-      .hero-btns { flex-direction: column; align-items: flex-start; }
-      .hero-h1 { font-size: 42px; }
+      .nav-inner { padding: 0 20px; }
+      .cta-notes { flex-direction: column; align-items: center; gap: 8px; }
     }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-up {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
 
   <!-- NAV -->
-  <nav id="nav">
-    <div class="nav-logo">
-      <span class="nav-logo-main">IBD Pick</span>
-      <span class="nav-logo-sub">Weekly Digest</span>
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-dot"></div>
+        <span class="nav-logo-text">IBD Pick</span>
+        <span class="nav-logo-badge">β</span>
+      </a>
+      <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="nav-cta" target="_blank" rel="noopener">無料で登録</a>
     </div>
-    <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="nav-cta" target="_blank" rel="noopener">無料で登録</a>
   </nav>
 
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-content">
-      <div class="hero-label">IBD Weekly Digest</div>
-      <h1 class="hero-h1">週10分で<br><span class="gold">IBDの最前線</span>を</h1>
-      <p class="hero-sub">
-        PubMedの最新論文をAIが日本語で要約<br>
-        毎週月曜AM7時、あなたにメールが届きます<br>
-        完全無料・登録30秒
-      </p>
-      <div class="hero-btns">
-        <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="btn-primary" target="_blank" rel="noopener">
-          無料で登録する <span class="arrow">→</span>
-        </a>
-        <a href="#about" class="btn-outline">詳しく見る</a>
-      </div>
-      <div class="hero-badges">
-        <div class="hero-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          完全無料
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-dot"></div>
+          無料ニュースレター · β版公開中
         </div>
-        <div class="hero-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          毎週月曜 AM7:00
-        </div>
-        <div class="hero-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          いつでも配信停止可
-        </div>
-      </div>
-      <div class="hero-count">
-        <div class="hero-avatars">
-          <div class="hero-avatar av1">M</div>
-          <div class="hero-avatar av2">R</div>
-          <div class="hero-avatar av3">D</div>
-        </div>
-        <span>現在 <strong>10名</strong> が登録中</span>
-      </div>
-    </div>
-    <div class="hero-image-wrap">
-      <div class="hero-image-bg">
-        <svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.6">
-          <defs>
-            <style>
-              .intestine { fill: none; stroke: rgba(180,160,100,0.4); stroke-width: 1.5; }
-              .intestine2 { fill: rgba(40,60,100,0.6); stroke: rgba(180,160,100,0.3); stroke-width: 1; }
-            </style>
-          </defs>
-          <!-- Large intestine cross-section illustration -->
-          <ellipse cx="200" cy="200" rx="130" ry="160" class="intestine2"/>
-          <ellipse cx="200" cy="200" rx="100" ry="130" class="intestine"/>
-          <ellipse cx="200" cy="200" rx="70" ry="95" class="intestine"/>
-          <ellipse cx="200" cy="420" rx="90" ry="110" class="intestine2"/>
-          <ellipse cx="200" cy="420" rx="65" ry="82" class="intestine"/>
-          <path d="M 140 170 Q 200 140 260 170" class="intestine"/>
-          <path d="M 135 200 Q 200 180 265 200" class="intestine"/>
-          <path d="M 140 230 Q 200 215 260 230" class="intestine"/>
-          <circle cx="200" cy="200" r="15" fill="rgba(180,160,100,0.2)" stroke="rgba(180,160,100,0.5)" stroke-width="1"/>
-          <circle cx="200" cy="420" r="12" fill="rgba(180,160,100,0.2)" stroke="rgba(180,160,100,0.5)" stroke-width="1"/>
-          <!-- Gold decorative lines -->
-          <line x1="320" y1="50" x2="370" y2="120" stroke="rgba(180,160,100,0.25)" stroke-width="1"/>
-          <line x1="340" y1="80" x2="380" y2="140" stroke="rgba(180,160,100,0.15)" stroke-width="1"/>
-          <circle cx="350" cy="500" r="40" fill="none" stroke="rgba(180,160,100,0.15)" stroke-width="1"/>
-          <circle cx="350" cy="500" r="25" fill="none" stroke="rgba(180,160,100,0.1)" stroke-width="1"/>
-        </svg>
-      </div>
-    </div>
-    <div class="scroll-hint">
-      <div class="scroll-line"></div>
-      SCROLL
-    </div>
-  </section>
-
-  <!-- 01 ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="section-num">01</div>
-      <div class="about-text">
-        <div class="section-label">About</div>
-        <h2 class="section-title">IBD Pickとは</h2>
-        <p class="about-body">
-          IBD Pick は、炎症性腸疾患（潰瘍性大腸炎・クローン病）に関する世界中の最新論文を、毎週自動収集・AI要約してお届けする無料メールダイジェストです。<br><br>
-          PubMedに登録された論文をリアルタイムで取得し、複数のAIで日本語要約。臨床試験・ガイドライン・生物学的製剤・基礎研究など、IBD診療に関わるすべてのカテゴリをカバーします。<br><br>
-          忙しい臨床、MR活動の間にも週10分で最新のエビデンスをキャッチアップできます。
+        <h1>IBD領域の重要論文を、<br><span class="accent">週1回、5分で。</span></h1>
+        <p class="hero-lead">
+          PubMed掲載論文から、医療・製薬関係者が押さえておきたいIBDトピックを日本語で整理してお届けします。
         </p>
-        <div class="feature-grid">
-          <div class="feature-card">
-            <div class="feature-icon">🔬</div>
-            <div class="feature-title">PubMed連携</div>
-            <div class="feature-desc">世界最大の医学文献データベースから自動収集</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🤖</div>
-            <div class="feature-title">AI要約</div>
-            <div class="feature-desc">複数のAIを掛け合わせた精度の高い日本語要約</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📅</div>
-            <div class="feature-title">週次配信</div>
-            <div class="feature-desc">毎週月曜AM7時、習慣化しやすいタイミング</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">✅</div>
-            <div class="feature-title">完全無料</div>
-            <div class="feature-desc">登録・閲覧・配信停止、すべて無料</div>
+        <div class="hero-cta-wrap">
+          <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="btn-primary" target="_blank" rel="noopener">
+            無料β版を受け取る →
+          </a>
+          <div class="hero-meta">
+            <div class="hero-meta-item">原著リンク付き</div>
+            <div class="hero-meta-item">週1回配信</div>
+            <div class="hero-meta-item">広告・製品プロモーションなし</div>
           </div>
         </div>
       </div>
-      <div>
-        <div class="about-stats">
-          <div class="stat-item">
-            <div class="stat-num">週1回</div>
-            <div class="stat-label">配信頻度</div>
+
+      <!-- Mini email preview -->
+      <div class="hero-email-card">
+        <div class="hec-header">
+          <div>
+            <div class="hec-logo">IBD Pick</div>
           </div>
-          <div class="stat-item">
-            <div class="stat-num">5〜15本</div>
-            <div class="stat-label">1回あたりの論文数</div>
+          <div class="hec-issue">Week #12 · 2026</div>
+        </div>
+        <div class="hec-body">
+          <div class="hec-week">2026年05月19日〜05月25日 のPickをお届けします</div>
+          <div class="hec-pick">
+            <div class="hec-pick-label">
+              <span class="hec-pick-num">1</span>
+              今週のPick
+            </div>
+            <div class="hec-pick-title">JAK阻害薬のリアルワールドデータ：中等症〜重症UCにおける有効性と安全性</div>
+            <div class="hec-pick-tags">
+              <span class="tag tag-uc">UC</span>
+              <span class="tag tag-jak">JAK阻害薬</span>
+              <span class="tag tag-rwd">リアルワールド</span>
+            </div>
+            <div class="hec-pick-summary">臨床試験とは異なる患者背景でのポジショニングを評価。実臨床での治療選択に示唆。</div>
+            <a href="#" class="hec-pick-link">原著を読む → PubMed</a>
           </div>
-          <div class="stat-item">
-            <div class="stat-num">日本語</div>
-            <div class="stat-label">要約言語</div>
+          <div class="hec-pick" style="border-color:#e2e8f0; background:#f8fafc;">
+            <div class="hec-pick-label" style="color:#718096;">
+              <span class="hec-pick-num" style="background:#edf2f7;color:#718096;">2</span>
+              今週のPick
+            </div>
+            <div class="hec-pick-title" style="color:#4a5568; font-size:11px;">生物学的製剤の費用対効果：系統的レビューの最新知見</div>
+            <div class="hec-pick-tags">
+              <span class="tag tag-bio">biologics</span>
+            </div>
+          </div>
+        </div>
+        <div class="hec-footer">
+          <div class="hec-footer-text">原著リンク付き · 広告なし · いつでも配信停止可</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+    <div class="container">
+      <div class="problem-grid">
+        <div>
+          <div class="section-header">
+            <div class="section-eyebrow">Why IBD Pick?</div>
+            <h2 class="section-title">IBD領域の論文は<br>増え続けています</h2>
+            <p class="section-lead">
+              でも、日々の業務の中で新着論文を追い続けるのは簡単ではありません。
+            </p>
+          </div>
+          <div class="problem-items">
+            <div class="problem-item fade-up">
+              <div class="problem-icon">📋</div>
+              <div>PubMedを毎週確認する時間がない</div>
+            </div>
+            <div class="problem-item fade-up">
+              <div class="problem-icon">🔍</div>
+              <div>どの論文が臨床・業務上で重要かを判断しにくい</div>
+            </div>
+            <div class="problem-item fade-up">
+              <div class="problem-icon">🌐</div>
+              <div>英語論文を読む前に日本語で概要をつかみたい</div>
+            </div>
+            <div class="problem-item fade-up">
+              <div class="problem-icon">💊</div>
+              <div>MR活動や企画検討のために疾患理解を深めたい</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="problem-visual">
+            <div class="pubmed-badge">PubMed 検索結果</div>
+            <div class="pubmed-card">
+              <div class="pubmed-title">Efficacy and safety of upadacitinib in patients with moderately to severely active ulcerative colitis...</div>
+              <div class="pubmed-meta">N Engl J Med · 2026</div>
+            </div>
+            <div class="pubmed-card">
+              <div class="pubmed-title">Real-world outcomes of vedolizumab versus infliximab in biologic-naive Crohn's disease...</div>
+              <div class="pubmed-meta">Gut · 2026</div>
+            </div>
+            <div class="pubmed-card">
+              <div class="pubmed-title">Fecal microbiota transplantation for induction of remission in active ulcerative colitis: systematic review...</div>
+              <div class="pubmed-meta">Lancet Gastroenterol · 2026</div>
+            </div>
+            <div class="pubmed-count">+ 他 247件 がヒット</div>
+            <div class="problem-arrow">
+              <span>📬</span>
+              IBD Pickが重要なものだけ週1回に絞ってお届け
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 02 TARGET -->
-  <section id="target">
-    <div class="section-inner">
-      <div class="section-num" style="color:rgba(180,160,120,0.08)">02</div>
-      <div class="section-label">For</div>
-      <h2 class="section-title">こんな方に</h2>
-      <div class="target-grid">
-        <div class="target-card">
-          <div class="target-num">01</div>
-          <h3 class="target-h3">IBD領域のMR</h3>
-          <p class="target-body">IBD関連製品を担当する製薬会社のMRの方。最新論文の動向を把握し、医師との質の高い対話に活かしたい方に。</p>
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">What you'll get</div>
+        <h2 class="section-title">IBD Pickで届くもの</h2>
+        <p class="section-lead">毎週月曜日の朝、5つの要素がセットになったメールが届きます。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fade-up">
+          <div class="feature-icon-wrap">📌</div>
+          <div class="feature-title">今週のPick</div>
+          <div class="feature-desc">重要度・新規性の高いIBD関連論文を厳選。週のノイズを取り除いて、本当に押さえておきたい論文だけをお届けします。</div>
         </div>
-        <div class="target-card">
-          <div class="target-num">02</div>
-          <h3 class="target-h3">IBD診療に携わる医師</h3>
-          <p class="target-body">消化器内科医・外科医として潰瘍性大腸炎・クローン病の患者を診療されている方。最新のエビデンスを効率よくキャッチアップしたい方に。</p>
+        <div class="feature-card fade-up">
+          <div class="feature-icon-wrap">📝</div>
+          <div class="feature-title">3行サマリー</div>
+          <div class="feature-desc">背景・結果・臨床または業務上の示唆を3行で整理。英語論文を読む前に全体像がつかめます。</div>
         </div>
-        <div class="target-card">
-          <div class="target-num">03</div>
-          <h3 class="target-h3">医療従事者・研究者</h3>
-          <p class="target-body">薬剤師・看護師・栄養士・研究者など、IBDに関わるすべての医療従事者の方。専門外でもわかりやすい日本語要約でキャッチアップできます。</p>
+        <div class="feature-card fade-up">
+          <div class="feature-icon-wrap">💡</div>
+          <div class="feature-title">なぜ重要か</div>
+          <div class="feature-desc">論文の内容だけでなく、臨床・製薬・情報提供の観点でなぜ注目すべきかをコメントで補足します。</div>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon-wrap">🔗</div>
+          <div class="feature-title">原著リンク</div>
+          <div class="feature-desc">全論文にPubMedリンクを掲載。詳細を確認したいときはワンクリックで原著に遷移できます。</div>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon-wrap">🏷️</div>
+          <div class="feature-title">疾患・テーマタグ</div>
+          <div class="feature-desc">UC / CD / biologics / JAK / real-world data / diet など、テーマ別のタグで関心領域をすぐに判断できます。</div>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon-wrap">⚡</div>
+          <div class="feature-title">週1回・読了5分</div>
+          <div class="feature-desc">まとめて届くから検索の手間なし。ミーティング前やコーヒーブレイク中に読み終えられる分量に絞っています。</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 03 CATEGORIES -->
-  <section id="categories">
-    <div class="section-inner">
-      <div class="section-num">03</div>
-      <div class="section-label">Coverage</div>
-      <h2 class="section-title" style="color:#fff">カバーするカテゴリ</h2>
-      <div class="cat-grid">
-        <div class="cat-item"><div class="cat-tag">💊</div><div class="cat-name">生物学的製剤・低分子薬</div></div>
-        <div class="cat-item"><div class="cat-tag">📋</div><div class="cat-name">治療指針・ガイドライン</div></div>
-        <div class="cat-item"><div class="cat-tag">🧬</div><div class="cat-name">バイオマーカー・モニタリング</div></div>
-        <div class="cat-item"><div class="cat-tag">🦠</div><div class="cat-name">腸内細菌・FMT</div></div>
-        <div class="cat-item"><div class="cat-tag">🏥</div><div class="cat-name">外科・合併症</div></div>
-        <div class="cat-item"><div class="cat-tag">🥗</div><div class="cat-name">栄養・食事療法</div></div>
-      </div>
-      <div class="metrics-row">
-        <div class="metric-item">
-          <div class="metric-num">週1回</div>
-          <div class="metric-label">配信頻度</div>
-          <div class="metric-sub">毎週月曜 AM7:00</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-num">5〜15本</div>
-          <div class="metric-label">1回あたりの論文数</div>
-          <div class="metric-sub">その週の主要論文を厳選</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-num">日本語</div>
-          <div class="metric-label">要約言語</div>
-          <div class="metric-sub">原著は英語、要約は日本語</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 04 SAMPLE EMAIL -->
+  <!-- SAMPLE -->
   <section id="sample">
-    <div class="section-inner">
-      <div class="section-num">04</div>
-      <div class="sample-left">
-        <div class="section-label">Sample</div>
-        <h2 class="section-title">届くメールのイメージ</h2>
-        <p class="section-lead">毎週月曜日の朝、このようなメールが届きます。論文タイトルの日本語訳、AI要約、原著へのリンクがセットになっています。</p>
-        <a href="https://note.com/" class="sample-note-link" target="_blank" rel="noopener">
-          実際のサンプルをnoteで見る →
-        </a>
-        <div class="email-features">
-          <div class="email-feature">
-            <div class="ef-icon">📝</div>
-            <div>
-              <div class="ef-title">論文タイトル（英語）＋日本語訳</div>
-              <div class="ef-desc">英語タイトルの直下に日本語訳を表示。一目で内容を把握できます。</div>
-            </div>
+    <div class="container">
+      <div class="sample-inner">
+        <div class="sample-left">
+          <div class="section-header">
+            <div class="section-eyebrow">Sample</div>
+            <h2 class="section-title">実際のPickを<br>見てみましょう</h2>
+            <p class="section-lead">
+              登録する前に中身を確認できます。毎週、このような論文カードが届きます。
+            </p>
           </div>
-          <div class="email-feature">
-            <div class="ef-icon">🏷️</div>
-            <div>
-              <div class="ef-title">カテゴリバッジ</div>
-              <div class="ef-desc">生物学的製剤・臨床試験・ガイドラインなど、カテゴリ別に色分け表示。</div>
-            </div>
+          <div class="hero-meta" style="margin-top: 8px;">
+            <div class="hero-meta-item">登録は無料・30秒</div>
+            <div class="hero-meta-item">いつでも配信停止</div>
           </div>
-          <div class="email-feature">
-            <div class="ef-icon">🤖</div>
-            <div>
-              <div class="ef-title">AI日本語要約（300〜500字）</div>
-              <div class="ef-desc">研究背景・方法・結果・臨床的意義を簡潔にまとめた日本語要約。</div>
-            </div>
-          </div>
-          <div class="email-feature">
-            <div class="ef-icon">🔗</div>
-            <div>
-              <div class="ef-title">原著へのリンク</div>
-              <div class="ef-desc">気になった論文はワンクリックでPubMedの原著にアクセス可能。</div>
-            </div>
+          <div style="margin-top: 28px;">
+            <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="btn-primary" target="_blank" rel="noopener" style="font-size:14px; padding:12px 24px;">
+              無料β版を受け取る →
+            </a>
           </div>
         </div>
-      </div>
-      <div class="email-mock">
-        <div class="email-header">
-          <h3>IBD Pick</h3>
-          <p>週刊IBD論文ダイジェスト &nbsp;|&nbsp; 2026年05月19日〜2026年05月25日</p>
-        </div>
-        <div class="email-body">
-          <p class="email-greeting">テスト 様</p>
-          <div class="email-section-title">今週の注目論文 ｜ 生物学的製剤・低分子薬</div>
-          <div class="email-paper">
-            <div class="email-paper-title">
-              Cost-effectiveness of treatment and care of patients with gastrointestinal inflammatory diseases
-              <span class="email-badge">🥇 メタ解析/SR</span>
+        <div class="sample-card fade-up">
+          <div class="sc-header">
+            <div class="sc-issue">今週のPick #03</div>
+            <div class="sc-date">2026年5月第3週</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-tags">
+              <span class="tag tag-uc">UC</span>
+              <span class="tag tag-jak">JAK阻害薬</span>
+              <span class="tag tag-rwd">リアルワールドデータ</span>
             </div>
-            <div class="email-meta">Journal of medical economics &nbsp;|&nbsp; 2026-Dec</div>
-            <div class="email-summary">本系統的レビューは、IBD患者の治療における費用対効果を評価し、生物学的製剤と非生物学的製剤を比較。主要評価項目は費用対効果であり、QALYsが用いられた。</div>
+            <div class="sc-title">JAK inhibitors in moderate-to-severe UC: a real-world, multicenter cohort study</div>
+            <div class="sc-title-ja">中等症〜重症UCに対するJAK阻害薬：多施設リアルワールドコホート研究</div>
+            <div class="sc-summary-label">3行まとめ</div>
+            <div class="sc-points">
+              <div class="sc-point">
+                <div class="sc-point-dot">1</div>
+                <div>対象は生物学的製剤経験後の中等症〜重症UC患者（n=312）</div>
+              </div>
+              <div class="sc-point">
+                <div class="sc-point-dot">2</div>
+                <div>臨床的寛解率52%・粘膜治癒率38%（追跡中央値14ヶ月）</div>
+              </div>
+              <div class="sc-point">
+                <div class="sc-point-dot">3</div>
+                <div>安全性プロファイルは臨床試験と概ね一致。感染症の頻度は低</div>
+              </div>
+            </div>
+            <div class="sc-why">
+              <div class="sc-why-label">なぜ重要か</div>
+              <div class="sc-why-text">生物学的製剤の効果が不十分な患者層でのリアルワールドデータは少なく、実臨床でのJAK阻害薬のポジショニングを理解するうえで重要な知見。MR活動や製品マーケティングの文脈でも参照価値が高い。</div>
+            </div>
           </div>
-          <div class="email-section-title">生物学的製剤・低分子薬</div>
-          <div class="email-paper" style="background:#fff; border-color:#eee;">
-            <div class="email-paper-title">Pan-immune-inflammation value and systemic immune-inflammation index predict the clinical efficacy of IBD treatments</div>
-            <div class="email-meta">Postgraduate medical journal &nbsp;|&nbsp; 2026-Mar</div>
-            <div class="email-summary">炎症指標（PIV・SII）がIBD治療効果を予測する可能性を示した後ろ向き研究。</div>
+          <div class="sc-footer">
+            <a href="https://pubmed.ncbi.nlm.nih.gov/" class="sc-pubmed" target="_blank" rel="noopener">
+              📄 原著を読む → PubMed
+            </a>
+            <div class="sc-journal">Gut · 2026</div>
           </div>
-        </div>
-        <div class="email-footer">配信停止はこちらからいつでも可能です</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 AUTHOR -->
-  <section id="author">
-    <div class="section-inner">
-      <div class="section-num">05</div>
-      <div>
-        <div class="section-label">About us</div>
-        <h2 class="section-title" style="color:#fff">運営者について</h2>
-        <blockquote class="author-quote">「IBD領域のMRとして働いていた時、最新論文を効率よくキャッチアップする手段がないことをずっと不思議に思っていました。」</blockquote>
-        <p class="author-body">
-          IBD Pickは、元IBD領域のMRが個人で開発・運営しているサービスです。特定の製薬企業・医療機関との利害関係はなく、中立的な情報提供を目的としています。<br><br>
-          現在はβ版として運営中です。ご意見・ご要望はメールにてお気軽にお寄せください。サービスの改善に活かしてまいります。
-        </p>
-        <a href="https://note.com/" class="author-note-link" target="_blank" rel="noopener">noteで開発の背景を読む →</a>
-      </div>
-      <div class="author-visual">
-        <div class="author-visual-text">
-          <div class="author-initial">IBD</div>
-          <div class="author-name">IBD Pick 運営者</div>
-          <div class="author-role">元IBD領域MR / 個人開発者</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 06 FAQ -->
-  <section id="faq">
-    <div class="section-inner">
-      <div class="section-num" style="color:rgba(180,160,120,0.08)">06</div>
-      <div class="section-label">FAQ</div>
-      <h2 class="section-title">よくある質問</h2>
-      <div class="faq-list">
-        <div class="faq-item">
-          <div class="faq-q">費用はかかりますか？<span class="faq-icon">+</span></div>
-          <div class="faq-a">完全無料です。登録・閲覧・配信停止、すべての機能を無料でご利用いただけます。</div>
+  <!-- EDITOR MESSAGE -->
+  <section id="editor">
+    <div class="container">
+      <div class="section-eyebrow" style="margin-bottom:32px;">Editor's note</div>
+      <div class="editor-inner">
+        <div class="editor-avatar">R</div>
+        <div>
+          <p class="editor-quote">
+            「IBD領域のMRとして働いていた頃、新着論文を追い続けることの難しさを痛感していました。PubMedで検索すると膨大な件数がヒットし、どれが重要かも分からない。IBD Pickは、その課題をシンプルに解決したくて作ったニュースレターです。」
+          </p>
+          <div class="editor-meta">
+            <strong>IBD Pick 編集者</strong>　元IBD領域MR / 個人開発・運営<br>
+            特定の製薬企業・医療機関との利害関係なし。中立的な論文情報の整理を方針としています。
+          </div>
         </div>
-        <div class="faq-item">
-          <div class="faq-q">どのような論文が届きますか？<span class="faq-icon">+</span></div>
-          <div class="faq-a">PubMedに登録されたIBD（炎症性腸疾患）関連の最新論文です。生物学的製剤・低分子薬、ガイドライン、バイオマーカー、腸内細菌・FMT、外科・合併症、栄養・食事療法の6カテゴリをカバーしています。</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">いつ届きますか？<span class="faq-icon">+</span></div>
-          <div class="faq-a">毎週月曜日の午前7時（JST）にメールをお届けします。前週月曜〜日曜の論文をまとめてお届けします。</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">配信を停止したい場合は？<span class="faq-icon">+</span></div>
-          <div class="faq-a">メール下部の「配信停止はこちら」リンクからいつでも停止できます。手続きは1クリックで完了します。</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">誰が作っているのですか？<span class="faq-icon">+</span></div>
-          <div class="faq-a">元IBD領域のMRが個人で開発・運営しています。特定の製薬企業・医療機関との利害関係はなく、中立的な情報提供を目的としています。</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">要約の精度はどのくらいですか？<span class="faq-icon">+</span></div>
-          <div class="faq-a">最新のAI（Gemini）を使用して日本語要約を生成しています。ただし、AIによる自動生成のため、医療上の意思決定には必ず原著論文および専門医にご相談ください。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST / DISCLAIMER -->
+  <section id="trust">
+    <div class="container">
+      <div class="trust-box">
+        <div class="trust-icon">📋</div>
+        <div>
+          <div class="trust-title">ご利用にあたって</div>
+          <div class="trust-body">
+            IBD Pickは、医療関係者・製薬関係者の情報収集を補助する目的のニュースレターです。診断・治療方針の決定、特定薬剤の推奨を目的とするものではありません。内容を臨床に活用する際は、必ず原著論文・添付文書・各種ガイドラインをご確認ください。
+          </div>
         </div>
       </div>
     </div>
@@ -679,60 +638,42 @@
 
   <!-- CTA -->
   <section id="cta">
-    <div class="section-inner">
-      <p class="cta-label">Join IBD Pick</p>
-      <h2 class="cta-title">今すぐ登録して、<br>来週月曜から始めよう</h2>
-      <p class="cta-sub">登録は30秒。費用は一切かかりません。<br>いつでも配信停止できます。</p>
-      <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="btn-cta-main" target="_blank" rel="noopener">
-        無料で登録する →
-      </a>
-      <div class="cta-notes">
-        <div class="cta-note">✓ 完全無料</div>
-        <div class="cta-note">✓ 登録30秒</div>
-        <div class="cta-note">✓ いつでも配信停止</div>
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-eyebrow">Join IBD Pick</div>
+        <h2 class="cta-title">IBD領域の論文キャッチアップを、<br>もっと軽く。</h2>
+        <p class="cta-sub">週1回、重要論文を日本語でお届けします。<br>登録は30秒。費用は一切かかりません。</p>
+        <a href="https://docs.google.com/forms/d/14KFyTaLOZzGuCd7NSOHevL2PqPy2ZFKFlwLwaAz10_0/viewform" class="btn-cta" target="_blank" rel="noopener">
+          無料β版に登録する →
+        </a>
+        <div class="cta-notes">
+          <div class="cta-note">完全無料</div>
+          <div class="cta-note">登録30秒</div>
+          <div class="cta-note">いつでも配信停止</div>
+          <div class="cta-note">広告・製品プロモーションなし</div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p><strong style="color:rgba(255,255,255,0.6)">IBD Pick</strong></p>
-    <p>© 2026 IBD Pick. 個人運営・非営利。<br>医療上の意思決定には必ず原著論文および専門医にご相談ください。</p>
+    <div class="footer-inner">
+      <div class="footer-logo">IBD Pick</div>
+      <div class="footer-text">
+        © 2026 IBD Pick. 個人運営・非営利。医療上の意思決定には必ず原著論文および専門医にご相談ください。
+      </div>
+    </div>
   </footer>
 
   <script>
-    // Nav scroll effect
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 20);
-    });
-
-    // FAQ accordion
-    document.querySelectorAll('.faq-q').forEach(q => {
-      q.addEventListener('click', () => {
-        const item = q.parentElement;
-        const wasOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-        if (!wasOpen) item.classList.add('open');
-      });
-    });
-
-    // Scroll animation
+    // Scroll animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-        }
+        if (e.isIntersecting) e.target.classList.add('visible');
       });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.feature-card, .target-card, .cat-item, .stat-item, .email-feature').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      observer.observe(el);
-    });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
